@@ -24,7 +24,7 @@ public class Resume {
     private String policitalStatus;//政治面貌
     private String workExperience;//工作经历
     private String favorite;//爱好
-    private Integer rtype=0;//0简历未发布1已发布2已查看
+    private Integer rtype=0;//0未发布1已发布2已查看3通知面试
     private Date time;
     public Resume() {
     }

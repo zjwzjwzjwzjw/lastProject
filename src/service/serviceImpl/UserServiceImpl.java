@@ -1,10 +1,7 @@
 package service.serviceImpl;
 
 import dao.UserDao;
-import entity.Dept;
-import entity.Job;
-import entity.Resume;
-import entity.User;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.UserService;
@@ -75,5 +72,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Job> findJobByDId(Integer dId) {
         return userDao.findJobByDId(dId);
+    }
+
+    @Override
+    public InterviewTable findInterviewByUid(Integer id) {
+        return userDao.findInterviewByUid(id);
+    }
+
+    @Override
+    public void updateInterviewType(InterviewTable interviewTable) {
+        userDao.updateInterviewType(interviewTable);
     }
 }

@@ -14,6 +14,7 @@
     <script src="js/jquery-1.7.2.js"></script>
     <script>
         $(function(){
+            var id=$("#id").val();
             $("#firstSelect").blur(function(){
                 var dept = $(this).val();//得到第一个下拉列表的值
                 $(".job").empty()
@@ -32,25 +33,42 @@
                 })
             })
             $("#sendResume").click(function(){
-                var id=$(":hidden[name='uid']").val();
+                var data=checkmessage()
+                if(data==""){
+                    alert("您还没有写简历")
+                }
+                if(data=="1"){
+                    alert("简历已发布")
+                }
+                if(data=="2"){
+                    alert("您的简历已被查看,请耐心等候通知哦")
+                }
+                if(data=="3"){
+                    window.location.href="/showInterview?id="+id+"&accName="+name;
+            }
+                return false
+            })
+            function checkmessage(){
                 var args={"id":id}
                 var url="/sendResume"
                 $.post(url,args,function(data){
-                    if(data==""){
-                        alert("您还没有写简历")
-                    }
-                    if(data=="right"){
-                        alert("简历已发布")
-                    }
+                    return data
                 })
-                return false
-            })
+            }
+            function interview(){
+                var name=$("#name").val();
+                var flag=confirm("您可以去面试了");
+                if(flag){
+                    window.location.href="/showInterview?id="+id+"&accName="+name;
+                }
+            }
         })
     </script>
 </head>
 <body>
 <form action="/saveResume">
-    <input type="hidden" name="uid" value="${requestScope.user.id}">
+    <input type="hidden" name="uid" id="id" value="${requestScope.user.id}">
+    <input type="hidden" id="name" value="${requestScope.user.accName}">
     <table border="2px" cellspacing="0">
         <tr>
             <td colspan="4" style="text-align: center">简历</td>

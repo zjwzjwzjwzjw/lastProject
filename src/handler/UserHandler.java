@@ -2,10 +2,7 @@ package handler;
 
 import com.alibaba.fastjson.JSON;
 import com.sun.deploy.net.HttpResponse;
-import entity.Dept;
-import entity.Job;
-import entity.Resume;
-import entity.User;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -31,15 +28,24 @@ import java.util.List;
 public class UserHandler {
     @Autowired
     private UserServiceImpl userService;
+    /**
+     * 跳转到注册页面
+     */
     @RequestMapping("add")
     public String add(){
        return "regist";
     }
+    /**
+     * 增加用户
+     */
     @RequestMapping("addUser")
     public String addUser(String accName,String passwordA){
         userService.saveUser(accName,passwordA);
         return "forward:main.jsp";
     }
+    /**
+     * 检测用户名是否存在
+     */
     @RequestMapping("checkUserName")
     @ResponseBody
     public String checkUserName(String name){
@@ -50,6 +56,9 @@ public class UserHandler {
             return "right";
         }
     }
+    /**
+     * 检测用户与密码是否匹配
+     */
     @RequestMapping("checkUser")
     @ResponseBody
     public String checkUser(String name,String password){
@@ -60,24 +69,36 @@ public class UserHandler {
             return "right";
         }
     }
+    /**
+     * 跳转到个人页面
+     */
     @RequestMapping("login")
     public String login(String accName,String password,Model model){
         User user=userService.findUserByNameAndPassword(accName,password);
         model.addAttribute("user",user);
         return "user";
     }
+    /**
+     * 跳到修改账户信息页面
+     */
     @RequestMapping("editAccount")
     public String editAccount(Integer id, Model model){
         User user=userService.findUserById(id);
         model.addAttribute("user",user);
         return "resetAccount";
     }
+    /**
+     * 修改账户信息
+     */
     @RequestMapping("registAccount")
     public String registAccount(User user, Model model){
         userService.updateUser(user);
         model.addAttribute("user",user);
         return "resetAccount";
     }
+    /**
+     * 查找部门相应的职位 二级联动
+     */
     @RequestMapping(value="findJobs",produces={"text/html;charset=UTF-8"})
     @ResponseBody
     public String findJobs(String dName, Model mode){
@@ -86,6 +107,9 @@ public class UserHandler {
         String j = JSON.toJSONString(jobs);
         return j;
     }
+    /**
+     * 显示个人简历
+     */
     @RequestMapping("showResume")
     public String showResume(Integer id,Model model){
         List<Dept> depts=userService.findAllDept();
@@ -100,6 +124,9 @@ public class UserHandler {
         model.addAttribute("user",user);
         return "createResume";
     }
+    /**
+     * 创建简历
+     */
     @RequestMapping("saveResume")
     public String saveResume(Resume resume,Integer uid){
         Resume resume1=userService.findResumeById(resume.getUid());
@@ -111,6 +138,9 @@ public class UserHandler {
         }
         return "forward:showResume?id="+uid;
     }
+    /**
+     * 发布简历
+     */
     @RequestMapping("sendResume")
     @ResponseBody
     public String sendResume(Integer id){
@@ -122,10 +152,34 @@ public class UserHandler {
             resume.setRtype(1);
             resume.setTime(new Date());
             userService.updateResume(resume);
-            return "right";
+            return "1";
+        }else if(resume.getRtype()==1){
+            return "1";//已发布
+        }else if(resume.getRtype()==2){
+            return "2";//已被查看
         }else{
-            return "right";//已发布
+            return "3";//通知面试
         }
+    }
+    /**
+     * 跳转到显示面试信息页面
+     */
+    @RequestMapping("showInterview")
+    public String showInterview(User user,Model model){
+        InterviewTable interviewTable=userService.findInterviewByUid(user.getId());
+        model.addAttribute("interview",interviewTable);
+        model.addAttribute("user",user);
+        return "interviewTable";
+    }
+    /**
+     * 更改面试状态
+     */
+    @RequestMapping("updateInterview")
+    public String updateInterview(String itype,Integer uid){
+        InterviewTable interviewTable=userService.findInterviewByUid(uid);
+        interviewTable.setItype(itype);
+        userService.updateInterviewType(interviewTable);
+        return "";
     }
     @InitBinder
     public void initBinder(WebDataBinder binder, WebRequest request){
