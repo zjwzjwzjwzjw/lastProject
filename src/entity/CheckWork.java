@@ -6,13 +6,13 @@ import java.util.Date;
  * Created by user on 2018/10/12.
  */
 public class CheckWork {
-    private Integer cid;
-    private Integer uid;
-    private Integer cmonth;
-    private Date cbegintime;
-    private Date caftertime;
-    private Integer cworkday;
-    private Integer cneedworkday;
+    private Integer cid;//表的id
+    private Integer uid;//用户id
+    private Integer cmonth;//月份
+    private Date cbegintime;//上班打卡时间
+    private Date caftertime;//下班打卡时间
+    private Integer cworkday;//已工作多少天
+    private Integer cneedworkday;//需工作多少天
 
     public CheckWork() {
     }

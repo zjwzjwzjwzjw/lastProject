@@ -1,10 +1,8 @@
 package handler;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.deploy.net.HttpResponse;
 import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import service.serviceImpl.UserServiceImpl;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,27 +72,25 @@ public class UserHandler {
      * 跳转到个人页面
      */
     @RequestMapping("login")
-    public String login(String accName,String password,Model model){
+    public String login(String accName, String password, HttpSession session){
         User user=userService.findUserByNameAndPassword(accName,password);
-        model.addAttribute("user",user);
+        session.setAttribute("user",user);
         return "user";
     }
     /**
      * 跳到修改账户信息页面
      */
     @RequestMapping("editAccount")
-    public String editAccount(Integer id, Model model){
-        User user=userService.findUserById(id);
-        model.addAttribute("user",user);
+    public String editAccount(){
         return "resetAccount";
     }
     /**
      * 修改账户信息
      */
     @RequestMapping("registAccount")
-    public String registAccount(User user, Model model){
+    public String registAccount(User user, HttpSession session){
         userService.updateUser(user);
-        model.addAttribute("user",user);
+        session.setAttribute("user",user);
         return "resetAccount";
     }
     /**
@@ -115,13 +112,11 @@ public class UserHandler {
         List<Dept> depts=userService.findAllDept();
         List<Job>jobs=userService.findAllJob();
         Resume resume=userService.findResumeById(id);
-        User user=userService.findUserById(id);
         if(resume!=null){
             model.addAttribute("resume",resume);
         }
         model.addAttribute("depts",depts);
         model.addAttribute("jobs",jobs);
-        model.addAttribute("user",user);
         return "createResume";
     }
     /**
@@ -143,12 +138,15 @@ public class UserHandler {
      */
     @RequestMapping("sendResume")
     @ResponseBody
-    public String sendResume(Integer id){
+    public String sendResume(Integer id,String diff){
         Resume resume=userService.findResumeById(id);
         if(resume==null){//没有简历
             return "";
         }
         if(resume.getRtype()==0){//未发布
+            if(diff!=null){//区别创建简历页面的ajax
+                return "0";
+            }
             resume.setRtype(1);
             resume.setTime(new Date());
             userService.updateResume(resume);
@@ -158,6 +156,15 @@ public class UserHandler {
         }else if(resume.getRtype()==2){
             return "2";//已被查看
         }else{
+            if(diff!=null){//区别创建简历页面的ajax
+                InterviewTable interviewTable=userService.findInterviewByUid(resume.getUid());
+                if(interviewTable.getIutype()==1){
+                    return "4";//用户已经查看过此面试消息
+                }else{
+                    return "3";//通知面试,用户未查看过
+                }
+            }
+            InterviewTable interviewTable=userService.findInterviewByUid(resume.getUid());
             return "3";//通知面试
         }
     }
@@ -167,17 +174,22 @@ public class UserHandler {
     @RequestMapping("showInterview")
     public String showInterview(User user,Model model){
         InterviewTable interviewTable=userService.findInterviewByUid(user.getId());
+        User user1=userService.findUserById(user.getId());
         model.addAttribute("interview",interviewTable);
-        model.addAttribute("user",user);
-        return "interviewTable";
+        model.addAttribute("user",user1);
+        return "showinterview";
     }
     /**
-     * 更改面试状态
+     * 更改面试表的状态
      */
     @RequestMapping("updateInterview")
-    public String updateInterview(String itype,Integer uid){
-        InterviewTable interviewTable=userService.findInterviewByUid(uid);
-        interviewTable.setItype(itype);
+    @ResponseBody
+    public String updateInterview(String itype,Integer iid){
+        InterviewTable interviewTable=userService.findInterviewByIid(iid);
+        interviewTable.setIutype(1);
+        if(itype!=null){
+            interviewTable.setItype(itype);
+        }
         userService.updateInterviewType(interviewTable);
         return "";
     }

@@ -15,6 +15,10 @@
         edept=#{edept},ejob=#{ejob},egender=#{egender},epolicitalStatus=#{epolicitalStatus},
         eaftertime=#{eaftertime},ereason=#{ereason} where uid=#{uid}
     </update>
+    Emploee findEmpByUid(Integer id);
+    <select id="findEmpByUid" resultType="Emploee">
+        SELECT *from emploees where uid=#{id}
+    </select>
     <select id="findEmpByDname" resultType="Emploee">
         select *from emploees where edept=#{dname}
     </select>

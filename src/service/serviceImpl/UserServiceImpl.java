@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public InterviewTable findInterviewByIid(Integer id) {
+        return userDao.findInterviewByIid(id);
+    }
+
+    @Override
     public InterviewTable findInterviewByUid(Integer id) {
         return userDao.findInterviewByUid(id);
     }

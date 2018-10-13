@@ -5,7 +5,7 @@ package entity;
  */
 public class Dept {
     private Integer dId;
-    private String dName;
+    private String dName;//²¿ÃÅÃû
     public Dept() {
     }
     public Integer getdId() {

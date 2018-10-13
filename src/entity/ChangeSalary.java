@@ -3,7 +3,7 @@ package entity;
 /**
  * Created by user on 2018/10/12.
  */
-public class ChangeSalary {
+public class ChangeSalary {//员工薪资有误表
     private Integer csid;
     private Integer csuid;//员工id
     private Integer csmonth;//月份

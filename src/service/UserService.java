@@ -20,6 +20,7 @@ public interface UserService {
     Dept findByName(String name);
     List<Job> findAllJob();//查找所有职位
     List<Job> findJobByDId(Integer dId);
-    InterviewTable findInterviewByUid(Integer id);//查找面试信息
+    InterviewTable findInterviewByIid(Integer id);//查找面试信息
+    InterviewTable findInterviewByUid(Integer id);//根据用户的id查找面试信息
     void updateInterviewType(InterviewTable interviewTable);
 }

@@ -33,42 +33,35 @@
                 })
             })
             $("#sendResume").click(function(){
-                var data=checkmessage()
-                if(data==""){
-                    alert("您还没有写简历")
-                }
-                if(data=="1"){
-                    alert("简历已发布")
-                }
-                if(data=="2"){
-                    alert("您的简历已被查看,请耐心等候通知哦")
-                }
-                if(data=="3"){
-                    window.location.href="/showInterview?id="+id+"&accName="+name;
-            }
-                return false
-            })
-            function checkmessage(){
                 var args={"id":id}
                 var url="/sendResume"
+                var result=""
                 $.post(url,args,function(data){
-                    return data
+                    if(data==""){
+                        alert("您还没有写简历")
+                    }
+                    if(data=="1"){
+                        alert("简历已发布")
+                    }
+                    if(data=="2"){
+                        alert("您的简历已被查看,请耐心等候通知哦")
+                    }
+                    if(data=="3"){
+                        var flag=confirm("您可以去面试了,是否去查看面试信息")
+                        if(flag){
+                            window.location.href="/showInterview?id="+id+"&accName="+name;
+                        }
+                    }
                 })
-            }
-            function interview(){
-                var name=$("#name").val();
-                var flag=confirm("您可以去面试了");
-                if(flag){
-                    window.location.href="/showInterview?id="+id+"&accName="+name;
-                }
-            }
+                return false
+            })
         })
     </script>
 </head>
 <body>
 <form action="/saveResume">
-    <input type="hidden" name="uid" id="id" value="${requestScope.user.id}">
-    <input type="hidden" id="name" value="${requestScope.user.accName}">
+    <input type="hidden" name="uid" id="id" value="${sessionScope.user.id}">
+    <input type="hidden" id="name" value="${sessionScope.user.accName}">
     <table border="2px" cellspacing="0">
         <tr>
             <td colspan="4" style="text-align: center">简历</td>
@@ -169,7 +162,7 @@
         <tr>
             <td>
                 <input type="submit" value="保存"></td>
-            <td><a href="/login?accName=${requestScope.user.accName}&password=${requestScope.user.password}" style="text-underline: none">返回</a></td>
+            <td><a href="/login?accName=${sessionScope.user.accName}&password=${sessionScope.user.password}" style="text-underline: none">返回</a></td>
             <td colspan="2" style="text-align: center">
                 <button><a href="#" style="text-underline: none" id="sendResume">提交简历</a></button>
             </td>

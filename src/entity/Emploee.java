@@ -7,19 +7,19 @@ import java.util.Date;
  */
 public class Emploee {
     private Integer uid;
-    private Integer etype;
-    private String ename;
-    private Integer eage;
-    private String eeducation;
-    private String efavorite;
-    private String eemail;
-    private Integer etel;
-    private String edept;
-    private String ejob;
-    private String epolicitalStatus;
-    private Date ebegintime;
-    private Date eaftertime;
-    private String ereason;
+    private Integer etype;//员工状态 1在职,0 离职
+    private String ename;//员工姓名
+    private Integer eage;//员工年龄
+    private String eeducation;//学历
+    private String efavorite;//爱好
+    private String eemail;//邮箱
+    private Integer etel;//联系电话
+    private String edept;//所属 部门
+    private String ejob;//职位
+    private String epolicitalStatus;//政治面貌
+    private Date ebegintime;//入职时间
+    private Date eaftertime;//离职时间
+    private String ereason;//离职原因
 
     public Emploee() {
     }

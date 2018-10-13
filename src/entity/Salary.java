@@ -6,11 +6,11 @@ package entity;
 public class Salary {
     private Integer id;
     private Integer uid;
-    private Double baseSalary;
-    private Double overTimeSalary;
-    private Double performanceSalary;
-    private Double publishmentSalary;
-    private Double socical;
+    private Double baseSalary;//基本工资
+    private Double overTimeSalary;//加班工资
+    private Double performanceSalary;//绩效工资
+    private Double publishmentSalary;//奖惩金额
+    private Double socical;//社保
 
     public Salary() {
     }

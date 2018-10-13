@@ -5,8 +5,8 @@ package entity;
  */
 public class Job {
     private Integer jId;
-    private Integer dId;
-    private String jName;
+    private Integer dId;//部门id
+    private String jName;//职位名
 
     public Job() {
     }

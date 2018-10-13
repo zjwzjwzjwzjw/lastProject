@@ -6,11 +6,11 @@ import java.util.Date;
  * Created by user on 2018/10/12.
  */
 public class Publishment {
-    private Integer pid;
-    private Integer uid;
-    private Double publishmentSalary;
-    private String pcontext;
-    private Date ptime;
+    private Integer pid;//奖惩表的id
+    private Integer uid;//员工id
+    private Double publishmentSalary;//奖惩金额
+    private String pcontext;//奖惩原因
+    private Date ptime;//奖惩时间
 
     public Publishment() {
     }
