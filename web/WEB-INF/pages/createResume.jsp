@@ -41,16 +41,10 @@
                         alert("您还没有写简历")
                     }
                     if(data=="1"){
-                        alert("简历已发布")
+                        alert("简历发布成功")
                     }
                     if(data=="2"){
-                        alert("您的简历已被查看,请耐心等候通知哦")
-                    }
-                    if(data=="3"){
-                        var flag=confirm("您可以去面试了,是否去查看面试信息")
-                        if(flag){
-                            window.location.href="/showInterview?id="+id+"&accName="+name;
-                        }
+                        alert("简历已发布")
                     }
                 })
                 return false

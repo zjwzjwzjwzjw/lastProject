@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: user
@@ -22,7 +23,7 @@
                 var crid=$(this).parent().parent().children()[0].innerHTML
                 var flag=confirm("确认删除吗?")
                 if(flag){
-                    $.post("",{"crid":crid},function(data){
+                    $.post("/man/delComputerResumes",{"crid":crid},function(data){
                     })
                     $(this).parent().parent().remove()
                 }
@@ -31,7 +32,7 @@
     </script>
 </head>
 <body>
-<table>
+<table border="2px" cellspacing="0">
     <tr>
         <td>序号</td>
         <td>应聘者名字</td>
@@ -41,15 +42,37 @@
         <td>操作</td>
         <c:forEach items="${requestScope.computerResumes}" var="cresume">
             <tr class="tab">
-                <td>${cresumes.crid}</td>
-                <td>${cresumes.tname}</td>
-                <td>${cresumes.time}</td>
-                <td>${cresumes.crtype}</td>
-                <td>${cresumes.cstype}</td>
+                <td>${cresume.crid}</td>
+                <td>${cresume.tname}</td>
+                <td>
+                    <f:formatDate value="${cresume.sendTime}" pattern="yyyy-MM-dd"/>
+                </td>
+                <td>${cresume.crtype}</td>
+                <td>${cresume.cstype}</td>
                 <td><button class="detail">查看</button><button class="del">删除</button></td>
             </tr>
         </c:forEach>
     </tr>
 </table>
+<c:if test="${!empty  requestScope.todayInterview}">
+    今日面试者:
+    <table border="2px" cellspacing="0">
+        <tr>
+            <td>编号</td>
+            <td>姓名</td>
+            <td>面试时间</td>
+            <td>面试</td>
+        </tr>
+        <c:forEach items="${requestScope.todayInterview}" var="interview">
+            <td>${interview.iid}</td>
+            <td>${interview.tname}</td>
+            <td>
+                <f:formatDate value="${interview.iinterviewtime}" pattern="yyyy-MM-dd"/>
+            </td>
+            <td><a href="/man/enterinterview?iid=${interview.iid}" class="enterinterview">面试</a></td>
+        </c:forEach>
+    </table>
+
+</c:if>
 </body>
 </html>

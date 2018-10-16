@@ -18,11 +18,12 @@ public interface UserDao {
     void saveComputerResumes(Resume Resume);//发布简历
     void updateResume(Resume resume);//更新简历
     Resume findResumeById(Integer id);//查找简历
+    Resume findResumeByRid(Integer rid);//查找简历
     List<Dept> findAllDept();//查找所有部门
     Dept findByName(String name);
     List<Job> findAllJob();//查找所有职位
     List<Job> findJobByDId(Integer dId);
     InterviewTable findInterviewByIid(Integer id);//根据面试表的id查找面试信息
-    InterviewTable findInterviewByUid(Integer id);//根据用户的id查找面试信息
+    List<InterviewTable> findInterviewByUid(Integer id);//根据用户的id查找面试信息
     void updateInterviewType(InterviewTable interviewTable);
 }

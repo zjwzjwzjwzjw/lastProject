@@ -27,8 +27,17 @@ public class ComputerResumes {
     private String favorite;//爱好
     private String crtype;//未查看已查看
     private String cstype;//面试状态
-    private Date time;
+    private Date time;//面试时间
+    private Date sendTime;//投递简历时间
     public ComputerResumes() {
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 
     public String getCstype() {
@@ -185,8 +194,9 @@ public class ComputerResumes {
 
     @Override
     public String toString() {
-        return "Resume{" +
-                "rid=" + rid +
+        return "ComputerResumes{" +
+                "crid=" + crid +
+                ", rid=" + rid +
                 ", uid=" + uid +
                 ", tname='" + tname + '\'' +
                 ", age=" + age +
@@ -201,7 +211,10 @@ public class ComputerResumes {
                 ", policitalStatus='" + policitalStatus + '\'' +
                 ", workExperience='" + workExperience + '\'' +
                 ", favorite='" + favorite + '\'' +
+                ", crtype='" + crtype + '\'' +
+                ", cstype='" + cstype + '\'' +
                 ", time=" + time +
+                ", sendTime=" + sendTime +
                 '}';
     }
 }

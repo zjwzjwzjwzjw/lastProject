@@ -32,7 +32,7 @@
         DELETE from computertraintable where  ctid=#{ctid}
     </delete>
     <select id="findAllComputerResumes" resultType="ComputerResumes">
-        SELECT *from computerresumes
+        SELECT *from computerresumes where cstype='未面试' or cstype='预约面试' or cstype='通知面试'
     </select>
     <delete id="delComputerResumesByCrid">
         DELETE from computerresumes where crid=#{crid}
@@ -40,7 +40,24 @@
     <select id="findComputerResumesByCrid" resultType="ComputerResumes">
         SELECT *from computerresumes where crid=#{crid}
     </select>
+    <select id="findComputerResumesByRid" resultType="ComputerResumes">
+        SELECT *from computerresumes where rid=#{rid}
+    </select>
     <update id="updateComputerResumesByCrid">
         UPDATE computerresumes set crtype=#{crtype},cstype=#{cstype} where crid=#{crid}
     </update>
+    <insert id="saveInterviewTable">
+         insert into
+         interviewTable
+         (time,uid,rid,tname,age,tel,dept,job,beforeJob,salary,gender,education,email,policitalStatus,workExperience,favorite,iinterviewtime,itype,iutype)
+         VALUES (#{sendTime},#{uid},#{rid},#{tname},#{age},#{tel},#{dept},#{job},#{beforeJob},
+         #{salary},#{gender},#{education},#{email},#{policitalStatus},
+         #{workExperience},#{favorite},#{time},'通知面试',0)
+    </insert>
+    <select id="findAllInterview" resultType="InterviewTable">
+        SELECT *from interviewTable
+    </select>
+    <select id="findInterviewByRid" resultType="InterviewTable">
+        SELECT *from interviewTable where  rid=#{rid}
+    </select>
 </mapper>

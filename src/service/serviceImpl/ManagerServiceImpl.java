@@ -1,10 +1,7 @@
 package service.serviceImpl;
 
 import dao.ManagerDao;
-import entity.ComputerResumes;
-import entity.ComputerTrainTable;
-import entity.Dept;
-import entity.Job;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.ManagerService;
@@ -79,7 +76,27 @@ public class ManagerServiceImpl extends EmploeeServiceImpl implements ManagerSer
     }
 
     @Override
+    public ComputerResumes findComputerResumesByRid(Integer rid) {
+        return managerDao.findComputerResumesByRid(rid);
+    }
+
+    @Override
     public void updateComputerResumesByCrid(ComputerResumes computerResumes) {
         managerDao.updateComputerResumesByCrid(computerResumes);
+    }
+
+    @Override
+    public void saveInterviewTable(ComputerResumes computerResumes) {
+        managerDao.saveInterviewTable(computerResumes);
+    }
+
+    @Override
+    public List<InterviewTable> findAllInterview() {
+        return managerDao.findAllInterview();
+    }
+
+    @Override
+    public InterviewTable findInterviewByRid(Integer rid) {
+        return managerDao.findInterviewByRid(rid);
     }
 }

@@ -141,52 +141,62 @@ public class UserHandler {
      */
     @RequestMapping("sendResume")
     @ResponseBody
-    public String sendResume(Integer id,String diff,ComputerResumes computerResumes){
+    public String sendResume(Integer id){
         Resume resume=userService.findResumeById(id);
         if(resume==null){//没有简历
             return "";
-        }
-        if(resume.getRtype()==0){//未发布
-            if(diff!=null){//区别创建简历页面的ajax
-                return "0";
-            }
+        }else if (resume.getRtype() == 0) {//未发布
             resume.setRtype(1);
             resume.setTime(new Date());
-
+            userService.saveComputerResumes(resume);
             userService.updateResume(resume);
-            return "1";
-        }else if(resume.getRtype()==1){
-            return "1";//已发布
-        }else if(resume.getRtype()==2){
-            return "2";//已被查看
+            return "1";//`发布成功
+        } else {
+            return "2";//已发布
+        }
+
+    }
+    @RequestMapping("checkInterview")
+    @ResponseBody
+    public String checkInterview(Integer uid) throws UnsupportedEncodingException {
+        Resume resume=userService.findResumeById(uid);
+        if(resume==null){//没有简历
+            return "";
+        }else if(resume.getRtype() == 0){
+            return "1";//简历未发布
         }else{
-            InterviewTable interviewTable=userService.findInterviewByUid(resume.getUid());
-            String nowTime=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            String interviewTime=new SimpleDateFormat("yyyy-MM-dd").format(interviewTable.getIinterviewtime());
-            if(diff!=null){//区别创建简历页面的ajax
-                if(interviewTable.getItype()==1&&nowTime.compareTo(interviewTime)>0){
-                    interviewTable.setItype(0);//面试时间已过期
-                    userService.updateInterviewType(interviewTable);
+            List<InterviewTable> list = userService.findInterviewByUid(uid);
+            String nowTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            Boolean flag = false;
+            if (list.size() != 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    String interviewTime = new SimpleDateFormat("yyyy-MM-dd").format(list.get(i).getIinterviewtime());
+                    if (list.get(i).getItype() .equals(new String("通知面试".getBytes(),"UTF-8")) && nowTime.compareTo(interviewTime) > 0) {
+                        list.get(i).setItype("已过期");//面试时间已过期
+                        userService.updateInterviewType(list.get(i));
+                    }
+                    if (list.get(i).getIutype() == 0) {
+                        flag = true;//用户未查看过此面试消息
+                    }
                 }
-                if(interviewTable.getIutype()==1){
-                    return "4";//用户已经查看过此面试消息
-                }else{
-                    return "3";//通知面试,用户未查看过
-                }
-            }else {
-                return "3";//通知面试
             }
+            if (flag) {
+                return "yes";//存在未查看过得简历
+            }
+            return "no";
         }
     }
     /**
      * 跳转到显示面试信息页面
      */
     @RequestMapping("showInterview")
-    public String showInterview(User user,Model model){
-        InterviewTable interviewTable=userService.findInterviewByUid(user.getId());
-        User user1=userService.findUserById(user.getId());
+    public String showInterview(Integer uid,Model model,Integer iid){
+        List<InterviewTable> interviewTable=userService.findInterviewByUid(uid);
         model.addAttribute("interview",interviewTable);
-        model.addAttribute("user",user1);
+        if(iid!=null){
+            InterviewTable interviewTable1=userService.findInterviewByIid(iid);
+            model.addAttribute("show",interviewTable1);
+        }
         return "showinterview";
     }
     /**
@@ -197,7 +207,17 @@ public class UserHandler {
     public String updateInterview(Integer iid){
         InterviewTable interviewTable=userService.findInterviewByIid(iid);
         interviewTable.setIutype(1);
-        interviewTable.setItype(2);
+        userService.updateInterviewType(interviewTable);
+        return "";
+    }
+    /**
+     * 更改面试表的状态
+     */
+    @RequestMapping("updateInterviewItype")
+    @ResponseBody
+    public String updateInterviewItype(Integer iid) throws UnsupportedEncodingException {
+        InterviewTable interviewTable=userService.findInterviewByIid(iid);
+        interviewTable.setItype(new String("预约面试".getBytes(),"UTF-8"));
         userService.updateInterviewType(interviewTable);
         return "";
     }

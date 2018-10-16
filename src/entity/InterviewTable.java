@@ -8,7 +8,7 @@ import java.util.Date;
 public class InterviewTable extends Resume{
     private Integer iid;
     private Date iinterviewtime;//面试时间
-    private Integer itype;//是否面试或是否录取 0已过期 1通知面试 2预约面试 3录取 4没录取
+    private String itype;//是否面试或是否录取 已过期 通知面试 预约面试 录取 没录取
     private Integer iutype;//是否查看过 对用户
     public InterviewTable() {
     }
@@ -37,11 +37,11 @@ public class InterviewTable extends Resume{
         this.iinterviewtime = iinterviewtime;
     }
 
-    public Integer getItype() {
+    public String getItype() {
         return itype;
     }
 
-    public void setItype(Integer itype) {
+    public void setItype(String itype) {
         this.itype = itype;
     }
 

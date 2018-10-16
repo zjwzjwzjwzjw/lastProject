@@ -10,9 +10,34 @@
 <html>
 <head>
     <title>Title</title>
+    <base href="http://localhost:8080/">
+    <script src="js/jquery-1.7.2.js"></script>
+    <script>
+        $(function(){
+            $("#ok").click(function(){
+                var date=$("#date").val()
+                if(date==""){
+                    alert("面试时间不能为空")
+                }else{
+                    var flag=confirm("确认通知面试者"+date+"来面试吗?")
+                    if(flag){
+                        var crid=$("#crid").val()
+                        var args={"crid":crid,"date":date}
+                        var url="/man/tellUserInterview"
+                        $.post(url,args,function(data){
+                            alert("已成功通知该面试者")
+                        })
+                    }
+                }
+            })
+        })
+
+    </script>
 </head>
 <body>
+<form>
 <table border="2px" cellspacing="0">
+    <input type="hidden" id="crid" value="${requestScope.computerResumes.crid}">
     <tr>
         <td colspan="4" style="text-align: center">简历</td>
     </tr>
@@ -42,26 +67,27 @@
     </tr>
     <tr>
         <td>上份工作</td>
-        <td>${requestScope.resume.beforeJob}</td>
+        <td>${requestScope.computerResumes.beforeJob}</td>
         <td>工作经验</td>
-        <td>${requestScope.resume.workExperience}</td>
+        <td>${requestScope.computerResumes.workExperience}</td>
     </tr>
     <tr>
         <td>期望薪资</td>
-        <td>${requestScope.resume.salary}
+        <td>${requestScope.computerResumes.salary}
         <td>兴趣爱好</td>
-        <td>${requestScope.resume.favorite}</td>
+        <td>${requestScope.computerResumes.favorite}</td>
     </tr>
     <tr>
-        <td colspan="2">
-            <button>面试</button>
+        <td colspan="3">
+            <input type="button" id="interview" value="面试">
+            <input type="date" id="date" value="${requestScope.computerResumes.time}">
+            <input type="button" id="ok" value="通知面试">
         </td>
-        <td colspan="2" style="text-align: center">
-            <button>
-                <a href="/man/showComputerResumes" style="text-underline: none">返回</a>
-            </button>
+        <td style="text-align: center">
+            <button><a href="/man/showComputerResumes" style="text-underline: none">返回</a></button>
         </td>
     </tr>
 </table>
+</form>
 </body>
 </html>

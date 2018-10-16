@@ -13,66 +13,71 @@
     <base href="http://localhost:8080/">
     <script src="js/jquery-1.7.2.js"></script>
     <script>
-        $(function(){
-            var diff="aaa";
-            var id=$("#id").val()
-            var args={"id":id,"diff":diff}
-            var url="/sendResume"
-            $.post(url,args,function(data){
-                if(data=="3"){
-                    var name=$("#name").val();
-                    var flag=confirm("您可以去面试了,是否去查看面试信息")
-                    if(flag){
-                        window.location.href="/showInterview?id="+id+"&accName="+name;
+        $(function() {
+            var id = $("#id").val()
+            var utype=$("#utype").val()
+            var args = {"uid": id}
+            var url = "/checkInterview"
+            if(utype==2) {
+                $.post(url, args, function (data) {
+                    if (data == "yes") {
+                        var flag = confirm("您可以去面试了,是否去查看面试信息")
+                        if (flag) {
+                            window.location.href = "/showInterview?uid="+id;
+                        }
                     }
-                }
-            })
-            $.post("/emp/searchcheckwork",{"uid":id},function(data){
-                if(data!=""){
-                    alert("您有"+data+"次缺勤记录");
-                }
-            })
-            $.post("/emp/searchTrainTable",{"uid":id},function(data){
-                if(data!="exit"){
-                    alert("您有"+data+"次培训记录还未查看");
-                }
-            })
-            $.post("/man/findComputerResumes",{},function(data){
-                alert(1111)
-                if(data=="yes"){
-                    alert("有未查看的简历,请及时查看")
-                }
-            })
-            var args1={"uid":id,"diff":diff}
-            var url1="/emp/toworking";/*检测今日是否打过上班卡*/
-            $.post(url1,args1,function(data){
-                if(data=="4"){
-                    $("#toworking").attr("disabled",true);
-                }
-            })
-            var url2="/emp/endwork"//检测今日是否打过下班卡
-            $.post(url2,args1,function(data){
-                if(data=="5"){
-                    $("#endwork").attr("disabled",true);
-                }
-            })
+                })
+            }
             $("#message").click(function(){
                 $.post(url,args,function(data){
                     if(data==""){
                         alert("您还没有写简历")
-                    }else if(data=="0"){
+                    }else if(data=="1"){
                         alert("您的简历还未发布")
-                    } else if(data=="1"){
-                        alert("部门主管还没来得及查看您的简历,请耐心等候哦")
-                    } else if(data=="2"){
-                        alert("您的简历已被查看,请耐心等候通知哦")
                     } else{
-                        var name=$("#name").val();
-                        window.location.href="/showInterview?id="+id+"&accName="+name;
+                        window.location.href="/showInterview?uid="+id;
                     }
                 })
                 return false;
             })
+            if(utype!=2) {//员工操作
+                $.post("/emp/searchcheckwork", {"uid": id}, function (data) {
+                    if (data != "") {
+                        alert("您有" + data + "次缺勤记录");
+                    }
+                })
+                $.post("/emp/searchTrainTable", {"uid": id}, function (data) {
+                    if (data != "") {
+                        alert("您有" + data + "次培训记录还未查看");
+                    }
+                })
+                var args1 = {"uid": id}
+                var url1 = "/emp/toworking";
+                /*检测今日是否打过上班卡*/
+                $.post(url1, args1, function (data) {
+                    if (data == "4") {
+                        $("#toworking").attr("disabled", true);
+                    }
+                })
+                var url2 = "/emp/endwork"//检测今日是否打过下班卡
+                $.post(url2, args1, function (data) {
+                    if (data == "5") {
+                        $("#endwork").attr("disabled", true);
+                    }
+                })
+            }
+            if (utype==0) {//是管理员是才查看
+                $.post("/man/findComputerResumes", {"uid": id}, function (data) {
+                    if (data == "yes") {
+                        alert("有未查看的简历,请及时查看")
+                    }
+                })
+                $.post("/man/checkInterMessage", {"uid": id}, function (data) {
+                    if (data == "yes") {
+                        alert("今日有面试者")
+                    }
+                })
+            }
             $("#exit").click(function(){
                 var flag=confirm("确认退出吗?")
                 if(!flag){
@@ -161,7 +166,7 @@
 </head>
 <body>
 <input type="hidden" id="id" value="${sessionScope.user.id}">
-<input type="hidden" id="name" value="${sessionScope.user.accName}">
+<input type="hidden" id="utype" value="${sessionScope.user.utype}">
 <c:if test="${sessionScope.user.utype==2}">
     <a id="message" href="#">消息提醒</a>
     <a href="/showResume?id=${sessionScope.user.id}">查看简历</a>
@@ -187,7 +192,7 @@
     <a href="">员工管理</a>
     <a href="">奖惩管理</a>
     <a href="">薪资管理</a>
-    <a href="">退出</a>
+    <a href="/main.jsp" id="exit">退出</a>
 </c:if>
 </body>
 </html>

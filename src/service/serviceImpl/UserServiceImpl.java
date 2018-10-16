@@ -55,6 +55,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Resume findResumeByRid(Integer rid) {
+        return userDao.findResumeByRid(rid);
+    }
+
+    @Override
+    public void saveComputerResumes(Resume Resume) {
+        userDao.saveComputerResumes(Resume);
+    }
+
+    @Override
     public List<Dept> findAllDept() {
         return userDao.findAllDept();
     }
@@ -80,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public InterviewTable findInterviewByUid(Integer id) {
+    public List<InterviewTable> findInterviewByUid(Integer id) {
         return userDao.findInterviewByUid(id);
     }
 

@@ -348,7 +348,7 @@ public class EmploeeHandler {
     @ResponseBody
     private String searchTrainTable(Integer  uid){
         List<TrainTable> list=emploeeService.findTrainTableByUid(uid);
-        if(list.size()==0){
+        if(list.size()!=0){
             String nowTime=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             int count=0;
             String ttime="";
@@ -382,7 +382,7 @@ public class EmploeeHandler {
             }
             return count+"";
         }
-        return "exit";
+        return "";
     }
     @RequestMapping("showTrainTable")
     private String showTrainTable(Integer  uid,Model model){

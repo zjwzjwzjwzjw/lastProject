@@ -1,9 +1,6 @@
 package service;
 
-import entity.ComputerResumes;
-import entity.ComputerTrainTable;
-import entity.Dept;
-import entity.Job;
+import entity.*;
 
 import java.util.List;
 
@@ -23,5 +20,9 @@ public interface ManagerService {
     List<ComputerResumes> findAllComputerResumes();
     void delComputerResumesByCrid(Integer crid);//删除简历信息
     ComputerResumes findComputerResumesByCrid(Integer crid);//查找简历信息
+    ComputerResumes findComputerResumesByRid(Integer rid);//查找简历信息
     void updateComputerResumesByCrid(ComputerResumes computerResumes);//更新简历信息
+    void saveInterviewTable(ComputerResumes computerResumes);
+    List<InterviewTable> findAllInterview();
+    InterviewTable findInterviewByRid(Integer rid);
 }

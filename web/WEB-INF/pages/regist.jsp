@@ -33,6 +33,10 @@
                     $("#checkName").text("账户名不能为空");
                     return false;
                 }
+                if(passwordA==""){
+                    $("#alarm").text("密码不能为空");
+                    return false;
+                }
                 if(passwordA!=passwordB){
                     $("#alarm").text("两次密码不一致");
                     return false;
