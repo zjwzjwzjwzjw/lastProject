@@ -14,6 +14,22 @@
     <script>
         $(function(){
             $("table:last").hide();
+            var itype=$("#itype").val();
+            if(itype==0){
+                $("#type").text("已过期")
+            }
+            if(itype==1){
+                $("#type").text("通知面试")
+            }
+            if(itype==2){
+                $("#type").text("预约面试")
+            }
+            if(itype==3){
+                $("#type").text("录取")
+            }
+            if(itype==4){
+                $("#type").text("未录取")
+            }
             $("#detail").click(function(){
                 $("#show").text("已查看")
                 $("table:last").show();
@@ -24,18 +40,26 @@
 
                 })
             })
-            $("#goInterview").click(function(){
-                var flag=confirm("是否确认预约面试")
-                if(flag){
-                    var iid=$("#iid").val();
-                    var itype=$("#goInterview").text();
-                    var url="/updateInterview"
-                    var args={"iid":iid,"itype":itype}
-                    $.post(url,args,function(data){
-                        $("#show").text("已查看")
-                        $("#itype").text("去面试")
-                        alert("预约成功,请按时去面试,祝您好运")
-                    })
+            $("#goInterview").click(function() {
+                var itype = $("#type").text();
+                if (itype == "已过期") {
+                    alert("面试已过期")
+                }
+                if(itype == "预约面试") {
+                    alert("已预约面试")
+                }
+                if(itype == "通知面试"){
+                    var flag = confirm("是否确认预约面试")
+                    if (flag) {
+                        var iid = $("#iid").val();
+                        var url = "/updateInterview"
+                        var args = {"iid": iid}
+                        $.post(url, args, function (data) {
+                            $("#show").text("已查看")
+                            $("#type").text("预约面试")
+                            alert("预约成功,请按时去面试,祝您好运")
+                        })
+                    }
                 }
             })
         })
@@ -45,6 +69,7 @@
 <input type="hidden" id="id" value="${sessionScope.user.id}">
 <input type="hidden" id="name" value="${sessionScope.user.accName}">
 <input type="hidden" id="iid" value="${requestScope.interview.iid}">
+<input type="hidden" id="itype" value="${requestScope.interview.itype}">
 <form>
     <table border="2px" cellspacing="0">
         <tr>
@@ -71,7 +96,7 @@
                 <f:formatDate value="${requestScope.interview.iinterviewtime}" pattern="yyyy-MM-dd"/>
             </td>
             <td id="goInterview">去面试</td>
-            <td id="itype">${requestScope.interview.itype}</td>
+            <td id="type"></td>
             <td id="detail">查看详情</td>
             <td><a href="/login?accName=${sessionScope.user.accName}&password=${sessionScope.user.password}">返回</a></td>
         </tr>

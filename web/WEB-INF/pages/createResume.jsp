@@ -55,6 +55,39 @@
                 })
                 return false
             })
+            $("form").submit(function(){
+                var name=$("#tname").val()
+                var age=$("#age").val()
+                var tel=$("#tel").val()
+                var dept=$("#firstSelect").val()
+                var job=$("#secondSelect").val()
+                var education=$("#education").val()
+                if(name==""){
+                    alert("姓名不能为空")
+                    return false;
+                }
+                if(age==""){
+                    alert("年龄不能为空")
+                    return false;
+                }
+                if(tel==""){
+                    alert("联系方式不能为空")
+                    return false;
+                }
+                if(dept==""){
+                    alert("应聘部门不能为空")
+                    return false;
+                }
+                if(job==""){
+                    alert("应聘职位不能为空")
+                    return false;
+                }
+                if(education==""){
+                    alert("学历不能为空")
+                    return false;
+                }
+
+            })
         })
     </script>
 </head>
@@ -68,7 +101,7 @@
         </tr>
         <tr>
             <td>真实姓名</td>
-            <td><input type="text" name="tname" value="${requestScope.resume.tname}"></td>
+            <td><input type="text" name="tname" id="tname" value="${requestScope.resume.tname}"></td>
             <td>性别</td>
             <td>
                 <c:if test="${requestScope.resume.gender=='男'}">
@@ -87,10 +120,10 @@
         </tr>
         <tr>
             <td>年龄</td>
-            <td><input type="number" name="age" value="${requestScope.resume.age}"></td>
+            <td><input type="number" name="age" id="age" value="${requestScope.resume.age}"></td>
             <td>学历</td>
             <td>
-                <select name="education">
+                <select name="education" id="education">
                     <option>中专</option>
                     <option>大专</option>
                     <option>本科</option>
@@ -102,7 +135,7 @@
         </tr>
         <tr>
             <td>联系方式</td>
-            <td><input type="number" name="tel" value="${requestScope.resume.tel}"></td>
+            <td><input type="number" name="tel" id="tel" value="${requestScope.resume.tel}"></td>
             <td>EMAIL</td>
             <td><input type="text" name="email" value="${requestScope.resume.email}"></td>
         </tr>
@@ -164,7 +197,7 @@
                 <input type="submit" value="保存"></td>
             <td><a href="/login?accName=${sessionScope.user.accName}&password=${sessionScope.user.password}" style="text-underline: none">返回</a></td>
             <td colspan="2" style="text-align: center">
-                <button><a href="#" style="text-underline: none" id="sendResume">提交简历</a></button>
+                <button><a href="#" style="text-underline: none" id="sendResume">发布简历</a></button>
             </td>
         </tr>
     </table>

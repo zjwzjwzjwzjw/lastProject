@@ -15,6 +15,7 @@ public interface UserDao {
     void saveUser(@Param("name") String name, @Param("password") String password);//注册用户
     void updateUser(User user);//更新用户
     void saveResume(Resume resume);//保存简历
+    void saveComputerResumes(Resume Resume);//发布简历
     void updateResume(Resume resume);//更新简历
     Resume findResumeById(Integer id);//查找简历
     List<Dept> findAllDept();//查找所有部门

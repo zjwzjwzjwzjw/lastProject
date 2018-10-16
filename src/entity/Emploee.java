@@ -9,6 +9,7 @@ public class Emploee {
     private Integer uid;
     private Integer etype;//员工状态 1在职,0 离职
     private String ename;//员工姓名
+    private String egender;
     private Integer eage;//员工年龄
     private String eeducation;//学历
     private String efavorite;//爱好
@@ -22,6 +23,14 @@ public class Emploee {
     private String ereason;//离职原因
 
     public Emploee() {
+    }
+
+    public String getEgender() {
+        return egender;
+    }
+
+    public void setEgender(String egender) {
+        this.egender = egender;
     }
 
     public Integer getUid() {

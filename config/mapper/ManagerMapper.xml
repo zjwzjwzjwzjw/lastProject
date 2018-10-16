@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ManagerDao">
+    <insert id="saveDept">
+        insert into depts(dName,dtime,duname,duid)
+        VALUES (#{dName},#{dtime},#{duname},#{duid})
+    </insert>
+    <delete id="delDeptByDid">
+        DELETE from depts where did=#{did}
+    </delete>
+    <update id="updateDept">
+        UPDATE depts set dName=#{dName} where did=#{did}
+    </update>
+    <insert id="saveJob">
+        insert into jobs(jName,jtime,juname,juid,did)
+        VALUES (#{jName},#{jtime},#{juname},#{juid},#{did})
+    </insert>
+    <delete id="delJobByDid">
+        DELETE from jobs where jid=#{jid}
+    </delete>
+    <update id="updateJob">
+        UPDATE jobs set jName=#{jName},did=#{did} where jid=#{jid}
+    </update>
+    <insert id="saveComputerTrainTable">
+        insert into computertraintable(context,ttime,dname,tbtype,needTime)VALUES (#{context},#{ttime},#{dname},#{tbtype},#{needTime})
+    </insert>
+    <update id="updateComputerTrainTable">
+        UPDATE computertraintable set
+        context=#{context},ttime=#{ttime},dname=#{dname},tbtype=#{tbtype},needTime=#{needTime} where ctid=#{ctid}
+    </update>
+    <delete id="delComputerTrainTable">
+        DELETE from computertraintable where  ctid=#{ctid}
+    </delete>
+    <select id="findAllComputerResumes" resultType="ComputerResumes">
+        SELECT *from computerresumes
+    </select>
+    <delete id="delComputerResumesByCrid">
+        DELETE from computerresumes where crid=#{crid}
+    </delete>
+    <select id="findComputerResumesByCrid" resultType="ComputerResumes">
+        SELECT *from computerresumes where crid=#{crid}
+    </select>
+    <update id="updateComputerResumesByCrid">
+        UPDATE computerresumes set crtype=#{crtype},cstype=#{cstype} where crid=#{crid}
+    </update>
+</mapper>

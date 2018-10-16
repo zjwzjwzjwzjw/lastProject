@@ -12,8 +12,8 @@ import java.util.List;
 /**
  * Created by user on 2018/10/13.
  */
-@Service
-public class EmploeeServiceImpl implements EmploeeService{
+@Service("emploeeService")
+public class EmploeeServiceImpl extends UserServiceImpl implements EmploeeService{
     @Autowired
     private EmploeeDao emploeeDao;
     @Override
@@ -52,8 +52,8 @@ public class EmploeeServiceImpl implements EmploeeService{
     }
 
     @Override
-    public void updateCheckAfterTimeByUid(Integer id, Date date) {
-        emploeeDao.updateCheckAfterTimeByUid(id,date);
+    public void updateCheckAfterTimeByCid(CheckWork checkWork) {
+        emploeeDao.updateCheckAfterTimeByCid(checkWork);
     }
 
     @Override
@@ -72,17 +72,49 @@ public class EmploeeServiceImpl implements EmploeeService{
     }
 
     @Override
+    public Salary findSalaryByUidAndYearAndMonth(Integer uid, Integer year, Integer month) {
+        return emploeeDao.findSalaryByUidAndYearAndMonth(uid,year,month);
+    }
+
+    @Override
+    public void updateSalaryBySid(Salary salary) {
+        emploeeDao.updateSalaryBySid(salary);
+    }
+
+    @Override
+    public void saveSalaryByUidAndYearAndMonth(Integer uid, Integer year, Integer month) {
+        emploeeDao.saveSalaryByUidAndYearAndMonth(uid,year,month);
+    }
+
+    @Override
     public List<TrainTable> findTrainTableByUid(Integer id) {
         return emploeeDao.findTrainTableByUid(id);
     }
 
     @Override
-    public void updateTrainTableByTidAndUid(Integer uid, Integer tid) {
-        emploeeDao.updateTrainTableByTidAndUid(uid,tid);
+    public void updateTrainTableByTidAndUid(TrainTable trainTable) {
+        emploeeDao.updateTrainTableByTidAndUid(trainTable);
+    }
+
+    @Override
+    public TrainTable findTrainTableByUidAndTid(Integer uid, Integer tid) {
+        return emploeeDao.findTrainTableByUidAndTid(uid,tid);
     }
 
     @Override
     public List<ChangeSalary> findChangeSalaryByUid(Integer id) {
         return emploeeDao.findChangeSalaryByUid(id);
     }
+
+    @Override
+    public CheckWork findCheckWorkByCdateAndUid(Integer cyear, Integer cmonth, Integer cdate, Integer uid) {
+        return emploeeDao.findCheckWorkByCdateAndUid(cyear,cmonth,cdate,uid);
+    }
+
+    @Override
+    public List<CheckWork> findCheckWorkByCmonthAndUid(Integer cyear, Integer cmonth, Integer uid) {
+        return emploeeDao.findCheckWorkByCmonthAndUid(cyear,cmonth,uid);
+    }
+
+
 }

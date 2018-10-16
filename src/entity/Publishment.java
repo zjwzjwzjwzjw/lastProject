@@ -13,6 +13,7 @@ public class Publishment {
     private Date ptime;//Ω±≥Õ ±º‰
 
     public Publishment() {
+
     }
 
     public Integer getPid() {

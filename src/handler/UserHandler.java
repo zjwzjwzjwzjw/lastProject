@@ -3,6 +3,7 @@ package handler;
 import com.alibaba.fastjson.JSON;
 import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ import java.util.List;
 @Controller
 public class UserHandler {
     @Autowired
+    @Qualifier("userService")
     private UserServiceImpl userService;
     /**
      * 跳转到注册页面
@@ -90,7 +92,8 @@ public class UserHandler {
     @RequestMapping("registAccount")
     public String registAccount(User user, HttpSession session){
         userService.updateUser(user);
-        session.setAttribute("user",user);
+        User user1=userService.findUserById(user.getId());
+        session.setAttribute("user",user1);
         return "resetAccount";
     }
     /**
@@ -138,7 +141,7 @@ public class UserHandler {
      */
     @RequestMapping("sendResume")
     @ResponseBody
-    public String sendResume(Integer id,String diff){
+    public String sendResume(Integer id,String diff,ComputerResumes computerResumes){
         Resume resume=userService.findResumeById(id);
         if(resume==null){//没有简历
             return "";
@@ -149,6 +152,7 @@ public class UserHandler {
             }
             resume.setRtype(1);
             resume.setTime(new Date());
+
             userService.updateResume(resume);
             return "1";
         }else if(resume.getRtype()==1){
@@ -156,16 +160,22 @@ public class UserHandler {
         }else if(resume.getRtype()==2){
             return "2";//已被查看
         }else{
+            InterviewTable interviewTable=userService.findInterviewByUid(resume.getUid());
+            String nowTime=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String interviewTime=new SimpleDateFormat("yyyy-MM-dd").format(interviewTable.getIinterviewtime());
             if(diff!=null){//区别创建简历页面的ajax
-                InterviewTable interviewTable=userService.findInterviewByUid(resume.getUid());
+                if(interviewTable.getItype()==1&&nowTime.compareTo(interviewTime)>0){
+                    interviewTable.setItype(0);//面试时间已过期
+                    userService.updateInterviewType(interviewTable);
+                }
                 if(interviewTable.getIutype()==1){
                     return "4";//用户已经查看过此面试消息
                 }else{
                     return "3";//通知面试,用户未查看过
                 }
+            }else {
+                return "3";//通知面试
             }
-            InterviewTable interviewTable=userService.findInterviewByUid(resume.getUid());
-            return "3";//通知面试
         }
     }
     /**
@@ -184,12 +194,10 @@ public class UserHandler {
      */
     @RequestMapping("updateInterview")
     @ResponseBody
-    public String updateInterview(String itype,Integer iid){
+    public String updateInterview(Integer iid){
         InterviewTable interviewTable=userService.findInterviewByIid(iid);
         interviewTable.setIutype(1);
-        if(itype!=null){
-            interviewTable.setItype(itype);
-        }
+        interviewTable.setItype(2);
         userService.updateInterviewType(interviewTable);
         return "";
     }

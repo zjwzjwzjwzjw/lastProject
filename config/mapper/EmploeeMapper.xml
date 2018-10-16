@@ -15,7 +15,6 @@
         edept=#{edept},ejob=#{ejob},egender=#{egender},epolicitalStatus=#{epolicitalStatus},
         eaftertime=#{eaftertime},ereason=#{ereason} where uid=#{uid}
     </update>
-    Emploee findEmpByUid(Integer id);
     <select id="findEmpByUid" resultType="Emploee">
         SELECT *from emploees where uid=#{id}
     </select>
@@ -29,17 +28,25 @@
         SELECT *from checkworks where cid=#{id}
     </select>
     <insert id="saveCheckBeginTimeByUid">
-        insert into checkworks(uid,cmonth,cbegintime,caftertime,cworkday,cneedworkday)values(
-        #{uid},#{cmonth},#{cbegintime},#{caftertime},#{cworkday},#{cneedworkday})
-        )
+        insert into
+          checkworks(uid,cmonth,cbegintime,caftertime,cworkday,cyear,cdate,cwtype)
+        values
+          (#{uid},#{cmonth},#{cbegintime},#{caftertime},#{cworkday},#{cyear},#{cdate},#{cwtype})
     </insert>
-    <update id="updateCheckAfterTimeByUid">
-        UPDATE checkworks set caftertime=#{date} where cid=#{id}
+    <update id="updateCheckAfterTimeByCid" parameterType="CheckWork">
+        UPDATE checkworks set caftertime=#{caftertime} , cwtype=#{cwtype} where cid=#{cid}
     </update>
+    <select id="findCheckWorkByCdateAndUid" resultType="CheckWork">
+    select*from checkworks where uid=#{uid} and cdate=#{cdate} and cmonth=#{cmonth} and cyear=#{cyear}
+    </select>
+    <select id="findCheckWorkByCmonthAndUid" resultType="CheckWork">
+        select*from checkworks where uid=#{uid} and cmonth=#{cmonth} and cyear=#{cyear}
+    </select>
     <insert id="savePublishment">
-        insert into publishment(uid,publishmentSalary,pcontext,ptime)values(
-          #{uid},#{publishmentSalary},#{pcontext},#{ptime}
-        )
+        insert into publishment
+          (uid,publishmentSalary,pcontext,ptime)
+        values
+          (#{uid},#{publishmentSalary},#{pcontext},#{ptime})
     </insert>
     <select id="findPubByUid" resultType="Publishment">
         SELECT *from publishment where uid=#{id}
@@ -50,10 +57,27 @@
     <select id="findTrainTableByUid" resultType="TrainTable">
         SELECT *from traintable where uid=#{id}
     </select>
+    <select id="findTrainTableByUidAndTid" resultType="TrainTable">
+        SELECT *from traintable where uid=#{id} and tid=#{tid}
+    </select>
     <update id="updateTrainTableByTidAndUid" >
-        UPDATE traintable set ttype=1 where tid=#{tid} and uid=#{uid}
+        UPDATE traintable set ttype=#{ttype},trype=#{trype},tbtype=#{tbtype} where tid=#{tid} and uid=#{uid}
     </update>
-    <select id="findChangeSalaryByUid">
+    <select id="findChangeSalaryByUid" resultType="ChangeSalary">
         SELECT *from changesalary where csuid=#{id}
     </select>
+    <select id="findSalaryByUidAndYearAndMonth" resultType="Salary">
+        SELECT *from salary where uid=#{uid} and syear=#{year} and smonth=#{month}
+    </select>
+    <insert id="saveSalaryByUidAndYearAndMonth">
+        insert into salary
+        (uid,syear,smonth,baseSalary,overTimeSalary,performanceSalary)
+        VALUES (#{uid},#{year},#{month},0.0,0.0,0.0)
+    </insert>
+    <update id="updateSalaryBySid">
+        UPDATE salary set
+         baseSalary=#{baseSalary},overTimeSalary=#{overTimeSalary},performanceSalary=#{performanceSalary},
+         publishmentSalary=#{publishmentSalary},actualSalary=#{actualSalary} ,socical=#{socical}
+         where sid=#{sid}
+    </update>
 </mapper>
