@@ -32,6 +32,10 @@
     </script>
 </head>
 <body>
+<c:if test="${empty  requestScope.computerResumes}">
+    尚无简历哦!
+</c:if>
+<c:if test="${!empty  requestScope.computerResumes}">
 <table border="2px" cellspacing="0">
     <tr>
         <td>序号</td>
@@ -54,6 +58,7 @@
         </c:forEach>
     </tr>
 </table>
+</c:if>
 <c:if test="${!empty  requestScope.todayInterview}">
     今日面试者:
     <table border="2px" cellspacing="0">
@@ -72,7 +77,7 @@
             <td><a href="/man/enterinterview?iid=${interview.iid}" class="enterinterview">面试</a></td>
         </c:forEach>
     </table>
-
 </c:if>
+<a href="/login?accName=${sessionScope.user.accName}&password=${sessionScope.user.password}" style="text-underline: none">返回</a>
 </body>
 </html>

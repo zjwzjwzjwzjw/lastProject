@@ -63,4 +63,16 @@ public class ComputerTrainTable {
     public void setTbtype(String tbtype) {
         this.tbtype = tbtype;
     }
+
+    @Override
+    public String toString() {
+        return "ComputerTrainTable{" +
+                "ctid=" + ctid +
+                ", context='" + context + '\'' +
+                ", ttime=" + ttime +
+                ", dname='" + dname + '\'' +
+                ", tbtype='" + tbtype + '\'' +
+                ", needTime=" + needTime +
+                '}';
+    }
 }

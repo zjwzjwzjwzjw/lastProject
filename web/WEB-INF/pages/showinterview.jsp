@@ -50,6 +50,10 @@
 <input type="hidden" id="id" value="${sessionScope.user.id}">
 <input type="hidden" id="name" value="${sessionScope.user.accName}">
 <form>
+    <c:if test="${empty requestScope.interview}">
+        <a href="/login?accName=${sessionScope.user.accName}&password=${sessionScope.user.password}">返回</a>
+    </c:if>
+<c:if test="${!empty requestScope.interview}">
     <table border="2px" cellspacing="0">
         <tr>
             <td colspan="6" style="text-align: center">面试信息</td>
@@ -84,6 +88,7 @@
             </tr>
         </c:forEach>
     </table>
+</c:if>
     <c:if test="${!empty requestScope.show}">
         <table border="2px" cellspacing="0">
             <tr>

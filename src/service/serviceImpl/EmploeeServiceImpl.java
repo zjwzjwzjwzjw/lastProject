@@ -17,8 +17,8 @@ public class EmploeeServiceImpl extends UserServiceImpl implements EmploeeServic
     @Autowired
     private EmploeeDao emploeeDao;
     @Override
-    public void saveEmploee(Emploee emploee) {
-        emploeeDao.saveEmploee(emploee);
+    public void saveEmploee(InterviewTable interviewTable) {
+        emploeeDao.saveEmploee(interviewTable);
     }
 
     @Override
@@ -39,6 +39,16 @@ public class EmploeeServiceImpl extends UserServiceImpl implements EmploeeServic
     @Override
     public List<Emploee> findEmpByDnameAndJName(String dname, String jname) {
         return emploeeDao.findEmpByDnameAndJName(dname,jname);
+    }
+
+    @Override
+    public Dept findDeptByDId(Integer dId) {
+        return emploeeDao.findDeptByDId(dId);
+    }
+
+    @Override
+    public Job findJobByJid(Integer jId) {
+        return emploeeDao.findJobByJid(jId);
     }
 
     @Override

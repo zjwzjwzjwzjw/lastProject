@@ -6,20 +6,20 @@
         VALUES (#{dName},#{dtime},#{duname},#{duid})
     </insert>
     <delete id="delDeptByDid">
-        DELETE from depts where did=#{did}
+        DELETE from depts where dId=#{dId}
     </delete>
     <update id="updateDept">
-        UPDATE depts set dName=#{dName} where did=#{did}
+        UPDATE depts set dName=#{dName} where dId=#{dId}
     </update>
     <insert id="saveJob">
-        insert into jobs(jName,jtime,juname,juid,did)
-        VALUES (#{jName},#{jtime},#{juname},#{juid},#{did})
+        insert into jobs(jName,jtime,juname,juid,dId)
+        VALUES (#{jName},#{jtime},#{juname},#{juid},#{dId})
     </insert>
-    <delete id="delJobByDid">
-        DELETE from jobs where jid=#{jid}
+    <delete id="delJobByJid">
+        DELETE from jobs where jId=#{jId}
     </delete>
     <update id="updateJob">
-        UPDATE jobs set jName=#{jName},did=#{did} where jid=#{jid}
+        UPDATE jobs set jName=#{jName},did=#{did} where jId=#{jId}
     </update>
     <insert id="saveComputerTrainTable">
         insert into computertraintable(context,ttime,dname,tbtype,needTime)VALUES (#{context},#{ttime},#{dname},#{tbtype},#{needTime})
@@ -59,5 +59,14 @@
     </select>
     <select id="findInterviewByRid" resultType="InterviewTable">
         SELECT *from interviewTable where  rid=#{rid}
+    </select>
+    <select id="findJobByJname" resultType="Job">
+        SELECT *FROM jobs where jName=#{jName} and dId=#{dId}
+    </select>
+    <select id="findAllComputerTrainTable" resultType="ComputerTrainTable">
+        SELECT *from ComputerTrainTable
+    </select>
+    <select id="findComputerTrainTableByCtid" resultType="ComputerTrainTable">
+        SELECT *from ComputerTrainTable where ctid=#{ctid}
     </select>
 </mapper>

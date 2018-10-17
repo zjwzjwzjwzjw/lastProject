@@ -126,6 +126,7 @@ public class ManagerHandler {
             user.setUtype(1);
             computerResumes.setCstype("录取");
             interviewTable.setItype("录取");
+            managerService.saveEmploee(interviewTable);
             managerService.updateUser(user);
         }else{
             computerResumes.setCstype("不录取");
@@ -133,6 +134,170 @@ public class ManagerHandler {
         }
         managerService.updateComputerResumesByCrid(computerResumes);
         managerService.updateInterviewType(interviewTable);
+        return "";
+    }
+    @RequestMapping("showAllDeptAndJob")
+    private String showAllDeptAndJob(Model model) {
+       List<Dept> depts=managerService.findAllDept();
+        List<Job>jobs=managerService.findAllJob();
+        model.addAttribute("depts",depts);
+        model.addAttribute("jobs",jobs);
+        return "manager/showAlldeptManager";
+    }
+    @RequestMapping("delDept")
+    @ResponseBody
+    private String delDept(String deptName){
+        Dept dept=managerService.findByName(deptName);
+        List<Emploee> users=managerService.findEmpByDname(deptName);
+        Boolean flag=false;
+        if(users.size()!=0){
+            for(int i=0;i<users.size();i++){
+                if(users.get(i).getEreason()==null){
+                    flag=true;//存在在职员工
+                }
+            }
+        }
+        if(flag){
+            return "no";
+        }else {
+            managerService.delDeptByDid(dept.getdId());
+            return "yes";
+        }
+    }
+    @RequestMapping("addDept")
+    @ResponseBody
+    private String addDept(String deptName,Dept dept){
+        Dept dept1=managerService.findByName(deptName);
+       if(dept1!=null){
+           return "no";//名字已存在
+       }else{
+           dept.setdName(deptName);
+           dept.setDtime(new Date());
+            managerService.saveDept(dept);
+           return "yes";
+       }
+    }
+    @RequestMapping("editDept")
+    @ResponseBody
+    private String editDept(String deptName,String lastName){
+        Dept dept=managerService.findByName(deptName);
+        Dept dept1=managerService.findByName(lastName);
+        if(dept1!=null){
+            return "no";//名字已存在
+        }else{
+            dept.setdName(lastName);
+            List<Emploee> emploees=managerService.findEmpByDname(deptName);
+            if(emploees.size()!=0){
+                for(Emploee e:emploees){
+                    e.setEdept(lastName);
+                    managerService.updateEmploee(e);
+                }
+            }
+            managerService.updateDept(dept);
+            return "yes";
+        }
+    }
+    @RequestMapping("delJob")
+    @ResponseBody
+    private String delJOb(Integer jId){
+        Job job=managerService.findJobByJid(jId);
+        Dept dept=managerService.findDeptByDId(job.getdId());
+        List<Emploee> users=managerService.findEmpByDnameAndJName(dept.getdName(),job.getjName());
+        Boolean flag=false;
+        if(users.size()!=0){
+            for(int i=0;i<users.size();i++){
+                if(users.get(i).getEreason()==null){
+                    flag=true;//该部门职位存在在职员工
+                }
+            }
+        }
+        if(flag){
+            return "no";
+        }else {
+            managerService.delJobByJid(jId);
+            return "yes";
+        }
+    }
+    @RequestMapping("addJob")
+    @ResponseBody
+    private String addJOb(String jobname,String deptname,Job job){
+        Dept dept=managerService.findByName(deptname);
+        List<Job> jobs=managerService.findJobByDId(dept.getdId());
+        Boolean flag=true;
+        if(jobs!=null){
+            for(int i=0;i<jobs.size();i++){
+                if(jobs.get(i).getjName().equals(jobname)){
+                    flag=false;//该部门此职位已存在
+                }
+            }
+        }
+        if(flag){
+            job.setdId(dept.getdId());
+            job.setjName(jobname);
+            managerService.saveJob(job);
+            return "yes";
+        }else{
+            return "no";
+        }
+    }
+    @RequestMapping("editJob")
+    @ResponseBody
+    private String editJob(Integer jId,String newJobName){
+        Job job=managerService.findJobByJid(jId);
+        Dept dept=managerService.findDeptByDId(job.getdId());
+        Job job1=managerService.findJobByJname(newJobName,dept.getdId());
+        Boolean flag=true;
+        if(job1==null){
+            job.setjName(newJobName);
+            managerService.updateJob(job);
+            List<Emploee> emploees=managerService.findEmpByDnameAndJName(dept.getdName(),job.getjName());
+            if(emploees.size()!=0){
+                for(Emploee e:emploees){
+                    e.setEjob(newJobName);
+                    managerService.updateEmploee(e);
+                }
+            }
+            return "yes";
+        }else{
+            return "no";
+        }
+    }
+    @RequestMapping("showTrainTable")
+    private String showTrainTable(Model model,Integer ctid) {
+        List<ComputerTrainTable> computerTrainTables=managerService.findAllComputerTrainTable();
+        List<Dept> depts=managerService.findAllDept();
+        model.addAttribute("computerTrainTables",computerTrainTables);
+        model.addAttribute("depts",depts);
+        if(ctid!=null){
+            ComputerTrainTable computerTrainTable=managerService.findComputerTrainTableByCtid(ctid);
+            model.addAttribute("computerTrainTable",computerTrainTable);
+        }
+        return "manager/showTrainTable";
+    }
+    @RequestMapping("saveComputerTrainTable")
+    private String saveComputerTrainTable(ComputerTrainTable computerTrainTable) {
+        String time=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String time1=new SimpleDateFormat("yyyy-MM-dd").format(computerTrainTable.getTtime());
+        if(time.compareTo(time1)==0){
+            computerTrainTable.setTbtype("已开始");
+        }else{
+            computerTrainTable.setTbtype("未开始");
+        }
+        managerService.saveComputerTrainTable(computerTrainTable);
+        return "forward:showTrainTable";
+    }
+    @RequestMapping("editComputerTrainTable")
+    @ResponseBody
+    private String editComputerTrainTable(ComputerTrainTable computerTrainTable) {
+        System.out.println(computerTrainTable);
+        String time=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String time1=new SimpleDateFormat("yyyy-MM-dd").format(computerTrainTable.getTtime());
+        if(time.compareTo(time1)==0){
+            computerTrainTable.setTbtype("已开始");
+        }else{
+            computerTrainTable.setTbtype("未开始");
+        }
+        managerService.updateComputerTrainTable(computerTrainTable);
         return "";
     }
     @InitBinder

@@ -9,11 +9,13 @@ import java.util.List;
  * Created by user on 2018/10/13.
  */
 public interface EmploeeService {
-    void  saveEmploee(Emploee emploee);//增加员工
+    void  saveEmploee(InterviewTable interviewTable);//增加员工
     void updateEmploee(Emploee emploee);//更新员工
     Emploee findEmpByUid(Integer id);//通过员工id查找员工信息
     List<Emploee> findEmpByDname(String dname);//查找某部门的员工
     List<Emploee> findEmpByDnameAndJName(String dname,String jname);//查找同职位员工
+    Dept findDeptByDId(Integer dId);
+    Job findJobByJid(Integer jId);
     List<CheckWork> findCheckWorkByUid(Integer id);//查看考勤
     void saveCheckBeginTimeByUid(CheckWork checkWork);//上班打卡
     void updateCheckAfterTimeByCid(CheckWork checkWork);//下班打卡

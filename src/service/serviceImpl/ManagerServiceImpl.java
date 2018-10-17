@@ -99,4 +99,21 @@ public class ManagerServiceImpl extends EmploeeServiceImpl implements ManagerSer
     public InterviewTable findInterviewByRid(Integer rid) {
         return managerDao.findInterviewByRid(rid);
     }
+
+    @Override
+    public Job findJobByJname(String jName,Integer dId) {
+        return managerDao.findJobByJname(jName,dId);
+    }
+
+    @Override
+    public List<ComputerTrainTable> findAllComputerTrainTable() {
+        return managerDao.findAllComputerTrainTable();
+    }
+
+    @Override
+    public ComputerTrainTable findComputerTrainTableByCtid(Integer ctid) {
+        return managerDao.findComputerTrainTableByCtid(ctid);
+    }
+
+
 }

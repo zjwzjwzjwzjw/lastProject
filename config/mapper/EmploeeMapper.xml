@@ -4,9 +4,9 @@
     <insert id="saveEmploee">
         insert into emploees
         (uid,etype,ename,eage,eeducation,efavorite,eemail,etel,
-        edept,ejob,egender,epolicitalStatus,ebegintime,eaftertime,ereason)values(
-        #{uid},#{etype},#{ename},#{eage},#{eeducation},#{efavorite},#{eemail},#{etel},
-        #{edept},#{ejob},#{egender},#{epolicitalStatus},#{ebegintime},#{eaftertime},#{ereason}
+        edept,ejob,egender,epolicitalStatus,ebegintime)values(
+        #{uid},1,#{tname},#{age},#{education},#{favorite},#{email},#{tel},
+        #{dept},#{job},#{gender},#{policitalStatus},#{iinterviewtime}
         )
     </insert>
     <update id="updateEmploee">
@@ -29,9 +29,9 @@
     </select>
     <insert id="saveCheckBeginTimeByUid">
         insert into
-          checkworks(uid,cmonth,cbegintime,caftertime,cworkday,cyear,cdate,cwtype)
+          checkworks(uid,cmonth,cbegintime,caftertime,cworkday,cyear,cdate,cwtype,cneedworkday)
         values
-          (#{uid},#{cmonth},#{cbegintime},#{caftertime},#{cworkday},#{cyear},#{cdate},#{cwtype})
+          (#{uid},#{cmonth},#{cbegintime},#{caftertime},#{cworkday},#{cyear},#{cdate},#{cwtype},#{cneedworkday})
     </insert>
     <update id="updateCheckAfterTimeByCid" parameterType="CheckWork">
         UPDATE checkworks set caftertime=#{caftertime} , cwtype=#{cwtype} where cid=#{cid}
@@ -80,4 +80,10 @@
          publishmentSalary=#{publishmentSalary},actualSalary=#{actualSalary} ,socical=#{socical}
          where sid=#{sid}
     </update>
+    <select id="findDeptByDId" resultType="Dept">
+        SELECT *from depts where dId=#{dId}
+    </select>
+    <select id="findJobByJid" resultType="Job">
+        SELECT *FROM jobs where jId=#{jId}
+    </select>
 </mapper>

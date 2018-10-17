@@ -35,12 +35,14 @@
     </script>
 </head>
 <body>
-    <div id="firstDiv" style="float: left">
+    <table id="firstDiv" style="float: left">
         <h2>部门</h2>
         <c:forEach items="${requestScope.dept}" var="dept">
-            <a class="dep">${dept.dName}</a><br><br>
+            <tr>
+                <td class="dep">${dept.dName}</td>
+            </tr>
         </c:forEach>
-    </div>
+    </table>
     <div id="secondDiv">
     </div>
     <a href="/login?accName=${sessionScope.user.accName}&password=${sessionScope.user.password}" style="text-underline: none">返回</a>

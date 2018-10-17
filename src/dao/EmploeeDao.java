@@ -10,10 +10,12 @@ import java.util.List;
  * Created by user on 2018/10/12.
  */
 public interface EmploeeDao extends UserDao{
-    void  saveEmploee(Emploee emploee);//增加员工
+    void  saveEmploee(InterviewTable interviewTable);//增加员工
     void updateEmploee(Emploee emploee);//更新员工
     Emploee findEmpByUid(Integer id);//通过员工id查找员工信息
     List<Emploee> findEmpByDname(String dname);//查找某部门的员工
+    Dept findDeptByDId(Integer dId);
+    Job findJobByJid(Integer jId);
     List<Emploee> findEmpByDnameAndJName(@Param("dname")String dname,@Param("jname")String jname);//查找同职位员工
     List<CheckWork> findCheckWorkByUid(Integer id);//根据员工id查看考勤
     CheckWork findCheckWorkByCdateAndUid(@Param("cyear") Integer cyear,@Param("cmonth") Integer cmonth,@Param("cdate") Integer cdate,@Param("uid") Integer uid);//查找某员工某年某月某日的打卡记录

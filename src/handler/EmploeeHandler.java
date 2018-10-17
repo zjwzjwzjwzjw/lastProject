@@ -102,7 +102,7 @@ public class EmploeeHandler {
     private String toworking(Integer uid,CheckWork checkWork,Publishment publishment,String diff){
         Calendar c = Calendar.getInstance();
         int day=c.get(c.DAY_OF_WEEK);
-        if(diff==null) {
+        if(diff!=null) {
             if (day == 1 || day == 7) {
                 return "0";//休息日无需打卡
             }
@@ -112,7 +112,7 @@ public class EmploeeHandler {
         int date = c.get(Calendar.DATE);
         CheckWork checkWork1=emploeeService.findCheckWorkByCdateAndUid(year,month,date,uid);
         if (checkWork1 == null) {//今日未打卡
-            if(diff==null) {
+            if(diff!=null) {
                 List<CheckWork> list = emploeeService.findCheckWorkByCmonthAndUid(year, month, uid);//获得此员工本月的打卡记录
                 int hour = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
@@ -124,7 +124,17 @@ public class EmploeeHandler {
                 checkWork.setCdate(date);
                 checkWork.setCneedworkday(new MyUtil().getWorkDay());//获取本月的工作天数
                 checkWork.setCbegintime(hour + "时" + minute + "分" + second + "秒");
-                checkWork.setCworkday(list.size() + 1);//打卡次数加1
+                int count=0;
+                if(list.size()==0){
+                    checkWork.setCworkday(1);//打卡次数加1
+                }else{
+                    for(CheckWork cc:list){
+                        if(cc.getCbegintime()!=null||cc.getCaftertime()!=null){
+                            count++;
+                        }
+                    }
+                    checkWork.setCworkday(count+1);//打卡次数加1
+                }
                 salary.setBaseSalary(salary.getBaseSalary()+100);//基本工资加100
                 emploeeService.updateSalaryBySid(salary);
                 if (hour >= 11) {
@@ -134,20 +144,19 @@ public class EmploeeHandler {
                     publishment.setPtime(new Date());
                     publishment.setPublishmentSalary(-50.0);
                     emploeeService.savePublishment(publishment);
-                    emploeeService.saveCheckBeginTimeByUid(checkWork);
                     return "1";
-                }
-                if (hour >= 9) {
+                }else if (hour >= 9) {
                     checkWork.setCwtype("迟到");
                     publishment.setUid(uid);
                     publishment.setPcontext("迟到");
                     publishment.setPtime(new Date());
                     publishment.setPublishmentSalary(-20.0);
                     emploeeService.savePublishment(publishment);
-                    emploeeService.saveCheckBeginTimeByUid(checkWork);
                     return "2";
+                }else {
+                    checkWork.setCwtype("正常");
+
                 }
-                checkWork.setCwtype("正常");
                 emploeeService.saveCheckBeginTimeByUid(checkWork);
                 return "3";
             }else{
@@ -162,7 +171,7 @@ public class EmploeeHandler {
     private String endwork(Integer uid,CheckWork checkWork,Publishment publishment,String diff) throws UnsupportedEncodingException {
         Calendar c = Calendar.getInstance();
         int day=c.get(c.DAY_OF_WEEK);
-        if(diff==null) {//区别点击事件
+        if(diff!=null) {//区别点击事件
             if (day == 1 || day == 7) {
                 return "0";//休息日无需打卡
             }
@@ -179,25 +188,41 @@ public class EmploeeHandler {
             emploeeService.saveSalaryByUidAndYearAndMonth(uid,year,month);
         }
         Salary salary1=emploeeService.findSalaryByUidAndYearAndMonth(uid,year,month);//查找到此员工本月的薪水记录
-        if(diff==null) {//区别未点击事件
+        if(diff!=null) {//区别未点击事件
             publishment.setUid(uid);
             publishment.setPtime(new Date());
             if (hour < 18) {//是否早退
                 publishment.setPcontext("早退");
                 publishment.setPublishmentSalary(-20.0);
+                emploeeService.savePublishment(publishment);
             }
             if(hour>19){
                 publishment.setPcontext("加班");
                 publishment.setPublishmentSalary((hour-18)*20.0);//加班每小时20元
+                emploeeService.savePublishment(publishment);
             }
-            emploeeService.savePublishment(publishment);
         }
         if(checkWork1==null){//今日上班未打卡
-            if(diff==null) {//区别未点击事件
+            if(diff!=null) {//区别未点击事件
                 salary1.setBaseSalary(salary1.getBaseSalary()+100);//基本工资加100
                 List<CheckWork> list = emploeeService.findCheckWorkByCmonthAndUid(year, month, uid);//获得此员工本月的打卡记录
-                checkWork.setCworkday(list.size() + 1);//打卡次数加1
+                checkWork.setUid(uid);
+                checkWork.setCyear(year);
+                checkWork.setCmonth(month);
+                checkWork.setCdate(date);
                 checkWork.setCneedworkday(new MyUtil().getWorkDay());//获取本月的工作天数
+                checkWork.setCaftertime(hour + "时" + minute + "分" + second + "秒");
+                int count=0;
+                if(list.size()==0){
+                    checkWork.setCworkday(1);//打卡次数加1
+                }else{
+                    for(CheckWork cc:list){
+                        if(cc.getCbegintime()!=null||cc.getCaftertime()!=null){
+                            count++;
+                        }
+                    }
+                    checkWork.setCworkday(count+1);//打卡次数加1
+                }
                 if (hour < 18) {//是否早退
                     checkWork.setCwtype("早退,缺少上班卡");
                     emploeeService.saveCheckBeginTimeByUid(checkWork);
@@ -211,7 +236,7 @@ public class EmploeeHandler {
                 return "";
             }
         }else{
-            if(diff==null) {//区别点击事件
+            if(diff!=null) {//区别点击事件
                 checkWork1.setCaftertime(hour + "时" + minute + "分" + second + "秒");//下班时间
                 if (hour <18) {//是否早退
                     if(hour>16){//5-6点下班

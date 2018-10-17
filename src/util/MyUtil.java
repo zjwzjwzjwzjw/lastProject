@@ -21,16 +21,4 @@ public class MyUtil {
         }
         return count;
     }
-   /* //获取两次打卡之间的时间间隔,判断之间是否有缺勤
-    public Map<Integer,Integer> getWorkDays(Integer year, Integer month, Integer begindate, Integer enddate){
-        Calendar c = Calendar.getInstance();
-        int count=0;
-        for(int i=begindate;i<enddate;i++){
-            c.set(year,month,i);
-            if(c.get(c.DAY_OF_WEEK)!=1||c.get(c.DAY_OF_WEEK)!=7){
-                count++;
-            }
-        }
-        return count;
-    }*/
 }

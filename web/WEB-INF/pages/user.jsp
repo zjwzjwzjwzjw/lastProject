@@ -97,7 +97,8 @@
                 return false;
             })
             $("#toworking").click(function(){
-                var args={"uid":id}
+                var diff="aaa"
+                var args={"uid":id,"diff":diff}
                 var url="/emp/toworking"
                 $.post(url,args,function(data){
                     if(data=="0"){
@@ -116,7 +117,8 @@
                 $("#toworking").attr("disabled",true);
             })
             $("#endwork").click(function(){
-                var args={"uid":id}
+                var diff="aaa"
+                var args={"uid":id,"diff":diff}
                 var url="/emp/endwork"
                 $.post(url,args,function(data){
                     if(data=="0"){
@@ -187,8 +189,8 @@
 </c:if>
 <c:if test="${sessionScope.user.utype==0}">
     <a href="/man/showComputerResumes">应聘管理</a>
-    <a href="">部门职位</a>
-    <a href="">培训管理</a>
+    <a href="/man/showAllDeptAndJob">部门职位</a>
+    <a href="/man/showTrainTable">培训管理</a>
     <a href="">员工管理</a>
     <a href="">奖惩管理</a>
     <a href="">薪资管理</a>

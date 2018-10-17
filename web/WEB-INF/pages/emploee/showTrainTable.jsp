@@ -16,9 +16,15 @@
     <script>
         $(function(){
             $(".attend").click(function(){
-                $(this).parent().children()[3].text("已查看")
-                var tbtype=$(this).parent().children()[4].text()
-                var tid=$(this).parent().children()[7].val()
+                 var trtype=$(this).parent().children()[3]
+                $trtype=$(trtype)
+                $trtype.text("已查看")
+                var tbtype=$(this).parent().children()[4]
+                $tbtype=$(tbtype)
+                var tbtype=$tbtype.text()
+                var tid=$(this).parent().children()[7]
+                $tid=$(tid)
+                var tid=$tid.val()
                 if(tbtype=="已结束"){
                     alert("培训已结束")
                 }else{
